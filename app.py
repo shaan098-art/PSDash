@@ -4,7 +4,6 @@ import plotly.express as px
 
 st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard", layout="wide")
 
-st.write(df.columns.tolist())
 
 # Load Data
 @st.cache_data
@@ -12,12 +11,13 @@ def load_data():
     df = pd.read_excel("PS_Data.xlsx")
     # Clean up column names: strip spaces and unify underscores
     df.columns = df.columns.str.strip().str.replace(" ", "_")
+    st.write("Your columns are:", df.columns.tolist())
     return df
 
 df = load_data()
 
 # Uncomment to debug column names:
-# st.write("Columns in the data:", df.columns.tolist())
+#st.write("Columns in the data:", df.columns.tolist())
 
 # Sidebar: Global Filters (NO Status filter)
 with st.sidebar:
