@@ -4,20 +4,20 @@ import plotly.express as px
 
 st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard", layout="wide")
 
-
 # Load Data
 @st.cache_data
 def load_data():
     df = pd.read_excel("PS_Data.xlsx")
     # Clean up column names: strip spaces and unify underscores
     df.columns = df.columns.str.strip().str.replace(" ", "_")
-    st.write("Your columns are:", df.columns.tolist())
+    # Add 'Month' column for all temporal grouping
+    df['Month'] = pd.to_datetime(df['Start_Date']).dt.to_period('M').astype(str)
     return df
 
 df = load_data()
 
 # Uncomment to debug column names:
-#st.write("Columns in the data:", df.columns.tolist())
+# st.write("Columns in the data:", df.columns.tolist())
 
 # Sidebar: Global Filters (NO Status filter)
 with st.sidebar:
@@ -33,7 +33,7 @@ filtered = df[
     df['Plan_Type'].isin(plan_types) &
     df['Meal_Frequency'].isin(meal_types) &
     (df["Total_Price"].between(*price_slider))
-]
+].copy()  # copy for safety if you add columns later
 
 # Tabs for Macro, Micro, and Custom Analysis
 tabs = st.tabs([
@@ -53,7 +53,6 @@ with tabs[0]:
 **1.1. Subscriber Growth Over Time**  
 Shows how subscriber sign-ups and revenue trend across months.
     """)
-    df['Month'] = pd.to_datetime(df['Start_Date']).dt.to_period('M').astype(str)
     by_month = filtered.groupby('Month').agg({'Customer_ID':'nunique','Total_Price':'sum'}).reset_index()
     fig1 = px.bar(by_month, x='Month', y='Customer_ID', title="New Subscribers Per Month")
     st.plotly_chart(fig1, use_container_width=True)
