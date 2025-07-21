@@ -4,6 +4,8 @@ import plotly.express as px
 
 st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard", layout="wide")
 
+st.write(df.columns.tolist())
+
 # Load Data
 @st.cache_data
 def load_data():
