@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard", layout="wide")
 
@@ -18,12 +17,11 @@ df = load_data()
 # Uncomment to debug column names:
 # st.write("Columns in the data:", df.columns.tolist())
 
-# Sidebar: Global Filters
+# Sidebar: Global Filters (NO Status filter)
 with st.sidebar:
     st.title("🔍 Global Filters")
     plan_types = st.multiselect("Select Plan Types:", options=df['Plan_Type'].unique(), default=list(df['Plan_Type'].unique()))
     meal_types = st.multiselect("Select Meal Frequency:", options=df['Meal_Frequency'].unique(), default=list(df['Meal_Frequency'].unique()))
-    status = st.multiselect("Subscription Status:", options=df['Status'].unique(), default=list(df['Status'].unique()))
     min_price, max_price = int(df["Total_Price"].min()), int(df["Total_Price"].max())
     price_slider = st.slider("Total Price Range (INR):", min_price, max_price, (min_price, max_price), step=500)
     st.write("")
@@ -32,7 +30,6 @@ with st.sidebar:
 filtered = df[
     df['Plan_Type'].isin(plan_types) &
     df['Meal_Frequency'].isin(meal_types) &
-    df['Status'].isin(status) &
     (df["Total_Price"].between(*price_slider))
 ]
 
@@ -44,11 +41,10 @@ tabs = st.tabs([
 # ==== 1. Macro Overview Tab ====
 with tabs[0]:
     st.title("📈 Macro Business Overview")
-    kpi1, kpi2, kpi3, kpi4 = st.columns(4)
+    kpi1, kpi2, kpi3 = st.columns(3)
     kpi1.metric("Total Subscribers", filtered['Customer_ID'].nunique())
     kpi2.metric("Total Revenue (INR)", f"{filtered['Total_Price'].sum():,.0f}")
     kpi3.metric("Avg. Revenue / Customer", f"{filtered['Total_Price'].mean():,.0f}")
-    kpi4.metric("Active Plans", filtered[filtered['Status']=="Active"].shape[0])
     st.divider()
 
     st.markdown("""
@@ -68,13 +64,7 @@ Reveals monthly revenue performance to spot peaks & dips.
     st.plotly_chart(fig2, use_container_width=True)
 
     st.markdown("""
-**1.3. Subscription Status Distribution**  
-Visualizes active, ended, renewed, and inactive plan proportions.
-    """)
-    st.plotly_chart(px.pie(filtered, names='Status', title="Plan Status Breakdown"), use_container_width=True)
-
-    st.markdown("""
-**1.4. Top Meal Frequencies**  
+**1.3. Top Meal Frequencies**  
 See which meal combinations drive most of the business.
     """)
     st.plotly_chart(
@@ -85,7 +75,7 @@ See which meal combinations drive most of the business.
         use_container_width=True)
 
     st.markdown("""
-**1.5. Revenue by Meal Frequency**  
+**1.4. Revenue by Meal Frequency**  
 Shows average order value by each meal plan type.
     """)
     st.plotly_chart(
@@ -108,28 +98,11 @@ Know your highest value subscribers.
 See how plan duration impacts customer spend.
     """)
     st.plotly_chart(
-        px.scatter(filtered, x='Duration_Days', y='Total_Price', color='Status', title="Plan Duration vs. Spend"),
+        px.scatter(filtered, x='Duration_Days', y='Total_Price', title="Plan Duration vs. Spend"),
         use_container_width=True)
 
     st.markdown("""
-**2.3. Retention: Renewals Analysis**  
-Explore characteristics of renewed vs. one-time subscribers.
-    """)
-    st.plotly_chart(
-        px.histogram(filtered, x='Status', y='Total_Price', color='Status', histfunc='avg', title="Avg Spend by Plan Status"),
-        use_container_width=True)
-
-    st.markdown("""
-**2.4. LTV by Status**  
-Compare customer value by subscription status.
-    """)
-    ltv = filtered.groupby('Status')['Total_Price'].mean().reset_index()
-    st.plotly_chart(
-        px.bar(ltv, x='Status', y='Total_Price', title="Average LTV by Status"), 
-        use_container_width=True)
-
-    st.markdown("""
-**2.5. Price Range Distribution**  
+**2.3. Price Range Distribution**  
 Analyze customer segments by spend tier.
     """)
     st.plotly_chart(
@@ -137,22 +110,13 @@ Analyze customer segments by spend tier.
         use_container_width=True)
 
     st.markdown("""
-**2.6. Cohort Retention Table**  
+**2.4. Cohort Retention Table**  
 Assess repeat rates for customers by first month joined.
     """)
     first = df.groupby('Customer_ID')['Start_Date'].min().reset_index()
     first['CohortMonth'] = pd.to_datetime(first['Start_Date']).dt.to_period('M').astype(str)
     cohort = first.groupby('CohortMonth').agg({'Customer_ID':'count'}).rename(columns={'Customer_ID':'New Customers'}).reset_index()
     st.dataframe(cohort, use_container_width=True)
-
-    st.markdown("""
-**2.7. Plan Churn Heatmap**  
-Heatmap of status vs. plan type to spot risk.
-    """)
-    pivot = pd.pivot_table(filtered, values='Customer_ID', index='Plan_Type', columns='Status', aggfunc='count', fill_value=0)
-    st.plotly_chart(
-        px.imshow(pivot, text_auto=True, aspect='auto', title="Plan Status by Plan Type"), 
-        use_container_width=True)
 
 # ==== 3. Plan & Revenue Deep-dive Tab ====
 with tabs[2]:
@@ -195,21 +159,14 @@ Which duration buckets are most profitable?
         use_container_width=True)
 
     st.markdown("""
-**3.5. Cross-tab: Plan Type x Status**  
-Compare plan outcomes across types.
-    """)
-    cross = pd.crosstab(filtered['Plan_Type'], filtered['Status'])
-    st.dataframe(cross, use_container_width=True)
-
-    st.markdown("""
-**3.6. Most Popular Combinations**  
+**3.5. Most Popular Combinations**  
 Discover top Plan + Meal combos.
     """)
     combos = filtered.groupby(['Plan_Type','Meal_Frequency']).size().reset_index(name='Count').sort_values('Count',ascending=False).head(10)
     st.dataframe(combos, use_container_width=True)
 
     st.markdown("""
-**3.7. Heatmap: Plan Type vs. Meal Frequency**  
+**3.6. Heatmap: Plan Type vs. Meal Frequency**  
 Pinpoint where your growth is coming from.
     """)
     pivot2 = pd.pivot_table(filtered, values='Customer_ID', index='Plan_Type', columns='Meal_Frequency', aggfunc='count', fill_value=0)
@@ -218,7 +175,7 @@ Pinpoint where your growth is coming from.
         use_container_width=True)
 
     st.markdown("""
-**3.8. Plan Price Distribution**  
+**3.7. Plan Price Distribution**  
 Whisker plot of price per plan type for outliers & range.
     """)
     st.plotly_chart(
