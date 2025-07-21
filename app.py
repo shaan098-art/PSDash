@@ -9,9 +9,14 @@ st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard"
 @st.cache_data
 def load_data():
     df = pd.read_excel("PS_Data.xlsx")
+    # Clean up column names: strip spaces and unify underscores
+    df.columns = df.columns.str.strip().str.replace(" ", "_")
     return df
 
 df = load_data()
+
+# Uncomment to debug column names:
+# st.write("Columns in the data:", df.columns.tolist())
 
 # Sidebar: Global Filters
 with st.sidebar:
@@ -19,7 +24,7 @@ with st.sidebar:
     plan_types = st.multiselect("Select Plan Types:", options=df['Plan_Type'].unique(), default=list(df['Plan_Type'].unique()))
     meal_types = st.multiselect("Select Meal Frequency:", options=df['Meal_Frequency'].unique(), default=list(df['Meal_Frequency'].unique()))
     status = st.multiselect("Subscription Status:", options=df['Status'].unique(), default=list(df['Status'].unique()))
-    min_price, max_price = int(df["Total Price"].min()), int(df["Total Price"].max())
+    min_price, max_price = int(df["Total_Price"].min()), int(df["Total_Price"].max())
     price_slider = st.slider("Total Price Range (INR):", min_price, max_price, (min_price, max_price), step=500)
     st.write("")
 
@@ -28,7 +33,7 @@ filtered = df[
     df['Plan_Type'].isin(plan_types) &
     df['Meal_Frequency'].isin(meal_types) &
     df['Status'].isin(status) &
-    (df["Total Price"].between(*price_slider))
+    (df["Total_Price"].between(*price_slider))
 ]
 
 # Tabs for Macro, Micro, and Custom Analysis
@@ -41,8 +46,8 @@ with tabs[0]:
     st.title("📈 Macro Business Overview")
     kpi1, kpi2, kpi3, kpi4 = st.columns(4)
     kpi1.metric("Total Subscribers", filtered['Customer_ID'].nunique())
-    kpi2.metric("Total Revenue (INR)", f"{filtered['Total Price'].sum():,.0f}")
-    kpi3.metric("Avg. Revenue / Customer", f"{filtered['Total Price'].mean():,.0f}")
+    kpi2.metric("Total Revenue (INR)", f"{filtered['Total_Price'].sum():,.0f}")
+    kpi3.metric("Avg. Revenue / Customer", f"{filtered['Total_Price'].mean():,.0f}")
     kpi4.metric("Active Plans", filtered[filtered['Status']=="Active"].shape[0])
     st.divider()
 
@@ -51,7 +56,7 @@ with tabs[0]:
 Shows how subscriber sign-ups and revenue trend across months.
     """)
     df['Month'] = pd.to_datetime(df['Start_Date']).dt.to_period('M').astype(str)
-    by_month = filtered.groupby('Month').agg({'Customer_ID':'nunique','Total Price':'sum'}).reset_index()
+    by_month = filtered.groupby('Month').agg({'Customer_ID':'nunique','Total_Price':'sum'}).reset_index()
     fig1 = px.bar(by_month, x='Month', y='Customer_ID', title="New Subscribers Per Month")
     st.plotly_chart(fig1, use_container_width=True)
 
@@ -59,7 +64,7 @@ Shows how subscriber sign-ups and revenue trend across months.
 **1.2. Monthly Revenue Trend**  
 Reveals monthly revenue performance to spot peaks & dips.
     """)
-    fig2 = px.line(by_month, x='Month', y='Total Price', markers=True, title="Monthly Revenue (INR)")
+    fig2 = px.line(by_month, x='Month', y='Total_Price', markers=True, title="Monthly Revenue (INR)")
     st.plotly_chart(fig2, use_container_width=True)
 
     st.markdown("""
@@ -84,7 +89,7 @@ See which meal combinations drive most of the business.
 Shows average order value by each meal plan type.
     """)
     st.plotly_chart(
-        px.box(filtered, x='Meal_Frequency', y='Total Price', title="Order Value by Meal Frequency"), 
+        px.box(filtered, x='Meal_Frequency', y='Total_Price', title="Order Value by Meal Frequency"), 
         use_container_width=True)
 
 # ==== 2. Micro Insights Tab ====
@@ -95,7 +100,7 @@ with tabs[1]:
 **2.1. Top 10 Customers by Spend**  
 Know your highest value subscribers.
     """)
-    top10 = filtered.groupby('Customer_ID').agg({'Total Price':'sum'}).sort_values('Total Price', ascending=False).head(10).reset_index()
+    top10 = filtered.groupby('Customer_ID').agg({'Total_Price':'sum'}).sort_values('Total_Price', ascending=False).head(10).reset_index()
     st.dataframe(top10, use_container_width=True)
 
     st.markdown("""
@@ -103,7 +108,7 @@ Know your highest value subscribers.
 See how plan duration impacts customer spend.
     """)
     st.plotly_chart(
-        px.scatter(filtered, x='Duration_Days', y='Total Price', color='Status', title="Plan Duration vs. Spend"),
+        px.scatter(filtered, x='Duration_Days', y='Total_Price', color='Status', title="Plan Duration vs. Spend"),
         use_container_width=True)
 
     st.markdown("""
@@ -111,16 +116,16 @@ See how plan duration impacts customer spend.
 Explore characteristics of renewed vs. one-time subscribers.
     """)
     st.plotly_chart(
-        px.histogram(filtered, x='Status', y='Total Price', color='Status', histfunc='avg', title="Avg Spend by Plan Status"),
+        px.histogram(filtered, x='Status', y='Total_Price', color='Status', histfunc='avg', title="Avg Spend by Plan Status"),
         use_container_width=True)
 
     st.markdown("""
 **2.4. LTV by Status**  
 Compare customer value by subscription status.
     """)
-    ltv = filtered.groupby('Status')['Total Price'].mean().reset_index()
+    ltv = filtered.groupby('Status')['Total_Price'].mean().reset_index()
     st.plotly_chart(
-        px.bar(ltv, x='Status', y='Total Price', title="Average LTV by Status"), 
+        px.bar(ltv, x='Status', y='Total_Price', title="Average LTV by Status"), 
         use_container_width=True)
 
     st.markdown("""
@@ -128,7 +133,7 @@ Compare customer value by subscription status.
 Analyze customer segments by spend tier.
     """)
     st.plotly_chart(
-        px.histogram(filtered, x='Total Price', nbins=20, title="Customer Spend Histogram"), 
+        px.histogram(filtered, x='Total_Price', nbins=20, title="Customer Spend Histogram"), 
         use_container_width=True)
 
     st.markdown("""
@@ -158,8 +163,8 @@ with tabs[2]:
 Find out which plan types earn the most for your business.
     """)
     st.plotly_chart(
-        px.bar(filtered.groupby('Plan_Type').agg({'Total Price':'sum'}).reset_index(),
-            x='Plan_Type', y='Total Price', title="Total Revenue by Plan Type"), 
+        px.bar(filtered.groupby('Plan_Type').agg({'Total_Price':'sum'}).reset_index(),
+            x='Plan_Type', y='Total_Price', title="Total Revenue by Plan Type"), 
         use_container_width=True)
 
     st.markdown("""
@@ -184,9 +189,9 @@ Visualize spread of short, medium, long-duration plans.
 **3.4. Revenue by Duration Category**  
 Which duration buckets are most profitable?
     """)
-    rev_by_dur = filtered.groupby('Duration_Category')['Total Price'].sum().reset_index()
+    rev_by_dur = filtered.groupby('Duration_Category')['Total_Price'].sum().reset_index()
     st.plotly_chart(
-        px.bar(rev_by_dur, x='Duration_Category', y='Total Price', title="Revenue by Duration"), 
+        px.bar(rev_by_dur, x='Duration_Category', y='Total_Price', title="Revenue by Duration"), 
         use_container_width=True)
 
     st.markdown("""
@@ -217,7 +222,7 @@ Pinpoint where your growth is coming from.
 Whisker plot of price per plan type for outliers & range.
     """)
     st.plotly_chart(
-        px.box(filtered, x='Plan_Type', y='Total Price', title="Plan Price by Type"), 
+        px.box(filtered, x='Plan_Type', y='Total_Price', title="Plan Price by Type"), 
         use_container_width=True)
 
 # ==== 4. Raw Data Tab ====
