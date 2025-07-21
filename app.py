@@ -8,9 +8,7 @@ st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard"
 @st.cache_data
 def load_data():
     df = pd.read_excel("PS_Data.xlsx")
-    # Clean up column names: strip spaces and unify underscores
     df.columns = df.columns.str.strip().str.replace(" ", "_")
-    # Add 'Month' column for all temporal grouping
     df['Month'] = pd.to_datetime(df['Start_Date']).dt.to_period('M').astype(str)
     return df
 
@@ -68,12 +66,20 @@ Reveals monthly revenue performance to spot peaks & dips.
 **1.3. Top Meal Frequencies**  
 See which meal combinations drive most of the business.
     """)
-    st.plotly_chart(
-        px.bar(filtered['Meal_Frequency'].value_counts().reset_index(),
-            x='index', y='Meal_Frequency', 
-            labels={'index':'Meal Frequency','Meal_Frequency':'Count'}, 
-            title="Meal Plan Popularity"),
-        use_container_width=True)
+    meal_freq_counts = (
+        filtered['Meal_Frequency']
+        .value_counts()
+        .reset_index()
+        .rename(columns={'index': 'Meal_Frequency', 'Meal_Frequency': 'Count'})
+    )
+    fig3 = px.bar(
+        meal_freq_counts,
+        x='Meal_Frequency',
+        y='Count',
+        labels={'Meal_Frequency': 'Meal Frequency', 'Count': 'Count'},
+        title="Meal Plan Popularity"
+    )
+    st.plotly_chart(fig3, use_container_width=True)
 
     st.markdown("""
 **1.4. Revenue by Meal Frequency**  
