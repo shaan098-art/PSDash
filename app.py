@@ -263,7 +263,7 @@ Visualize spread of short, medium, long-duration plans.
             title="Plan Duration Segments",
             color='Duration_Category',
         color_discrete_map={
-            'null': '#FFD166',       
+            'null': '#FFFBCC',       
             '16-30 days': '#90EE90',  
             '0-7 days': '#0D8661',
             '8-15 days': '#EF476F',
