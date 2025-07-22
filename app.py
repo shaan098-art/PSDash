@@ -51,9 +51,20 @@ with tabs[0]:
 **1.1. Subscriber Growth Over Time**  
 Shows how subscriber sign-ups and revenue trend across months.
     """)
-    by_month = filtered.groupby('Month').agg({'Customer_ID':'nunique','Total_Price':'sum'}).reset_index()
-    fig1 = px.bar(by_month, x='Month', y='Customer_ID', title="New Subscribers Per Month")
-    st.plotly_chart(fig1, use_container_width=True)
+    by_month = (
+    filtered.groupby('Month')
+    .agg(New_Subscribers=('Customer_ID', 'nunique'), Total_Revenue=('Total_Price', 'sum'))
+    .reset_index()
+)
+fig1 = px.bar(
+    by_month, 
+    x='Month', 
+    y='Unique_Customers', 
+    title="New Subscribers Per Month",
+    labels={'New_Subscribers': 'Number of Unique Customers', 'Month': 'Month'}
+)
+st.plotly_chart(fig1, use_container_width=True)
+
 
     st.markdown("""
 **1.2. Monthly Revenue Trend**  
