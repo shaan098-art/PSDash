@@ -82,7 +82,7 @@ Shows how subscriber sign-ups and revenue trend across months.
         y='Unique_Customers',
         title="New Subscribers Per Month",
         labels={'Unique_Customers': 'Number of Unique Customers', 'Month': 'Month'},
-        color_discrete_sequence=['#0D8661']  # Custom teal green
+        color_discrete_sequence=['#90EE90']  # Custom teal green
     )
     st.plotly_chart(fig1, use_container_width=True)
 
@@ -94,7 +94,7 @@ Reveals monthly revenue performance to spot peaks & dips.
         by_month, x='Month', y='Total_Revenue',
         markers=True, title="Monthly Revenue (INR)",
         labels={'Total_Revenue': 'Total Revenue (INR)', 'Month': 'Month'},
-        color_discrete_sequence=['#90EE90']
+        color_discrete_sequence=['#0D8661']
     )
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -115,7 +115,8 @@ See which meal combinations drive most of the business.
             x='Meal_Frequency',
             y='Count',
             labels={'Meal_Frequency': 'Meal Frequency', 'Count': 'Count'},
-            title="Meal Plan Popularity"
+            title="Meal Plan Popularity",
+            color_discrete_sequence=['#90EE90']
         )
         st.plotly_chart(fig3, use_container_width=True)
     else:
