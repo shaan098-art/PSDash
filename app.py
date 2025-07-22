@@ -94,7 +94,7 @@ Reveals monthly revenue performance to spot peaks & dips.
         by_month, x='Month', y='Total_Revenue',
         markers=True, title="Monthly Revenue (INR)",
         labels={'Total_Revenue': 'Total Revenue (INR)', 'Month': 'Month'},
-        color_discrete_sequence=['#A8D5BA']
+        color_discrete_sequence=['#90EE90']
     )
     st.plotly_chart(fig2, use_container_width=True)
 
