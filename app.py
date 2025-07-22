@@ -2,7 +2,14 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.set_page_config(page_title="Healthy Meals - Subscription Analytics Dashboard", layout="wide")
+st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashboard", layout="wide")
+
+# ========== File Upload ==========
+with st.sidebar:
+    st.title("🔍 Global Filters")
+    uploaded_file = st.file_uploader(
+        "Upload a data file (.xlsx only)", type=["xlsx"], help="Upload your latest datasheet here."
+    )
 
 # Load Data
 @st.cache_data
@@ -16,7 +23,7 @@ df = load_data()
 
 # Sidebar: Global Filters (NO Status filter)
 with st.sidebar:
-    st.title("🔍 Global Filters")
+    st.title("🔍 Filters")
     plan_types = st.multiselect(
         "Select Plan Types:",
         options=df['Plan_Type'].unique(),
