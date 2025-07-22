@@ -135,6 +135,10 @@ Shows average order value by each meal plan type.
 
 # ==== 2. Micro Insights Tab ====
 with tabs[1]:
+    st.markdown(
+        "<h1 style='text-align: center; color: #0D8661; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
+        unsafe_allow_html=True
+    )
     st.title("🔍 Micro-Customer Insights")
 
     st.markdown("""
