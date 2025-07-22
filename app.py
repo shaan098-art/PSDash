@@ -132,7 +132,8 @@ Shows average order value by each meal plan type.
             x='Meal_Frequency',
             y='Total_Price',
             title="Order Value by Meal Frequency",
-            labels={'Meal_Frequency': 'Meal Frequency', 'Total_Price': 'Order Value (INR)'}
+            labels={'Meal_Frequency': 'Meal Frequency', 'Total_Price': 'Order Value (INR)'},
+            color_discrete_sequence=['#0D8661']
         ),
         use_container_width=True
     )
@@ -169,7 +170,8 @@ See how plan duration impacts customer spend.
             x='Duration_Days',
             y='Total_Price',
             title="Plan Duration vs. Spend",
-            labels={'Duration_Days': 'Duration (Days)', 'Total_Price': 'Spend (INR)'}
+            labels={'Duration_Days': 'Duration (Days)', 'Total_Price': 'Spend (INR)'},
+            color_discrete_sequence=['#90EE90']
         ),
         use_container_width=True
     )
@@ -184,7 +186,8 @@ Analyze customer segments by spend tier.
             x='Total_Price',
             nbins=20,
             title="Customer Spend Histogram",
-            labels={'Total_Price': 'Total Spend (INR)'}
+            labels={'Total_Price': 'Total Spend (INR)'},
+            color_discrete_sequence=['#0D8661']
         ),
         use_container_width=True
     )
@@ -228,7 +231,8 @@ Find out which plan types earn the most for your business.
             x='Plan_Type',
             y='Total_Revenue',
             title="Total Revenue by Plan Type",
-            labels={'Plan_Type': 'Plan Type', 'Total_Revenue': 'Total Revenue (INR)'}
+            labels={'Plan_Type': 'Plan Type', 'Total_Revenue': 'Total Revenue (INR)'},
+            color_discrete_sequence=['#0D8661']
         ),
         use_container_width=True
     )
@@ -256,7 +260,15 @@ Visualize spread of short, medium, long-duration plans.
         px.pie(
             filtered,
             names='Duration_Category',
-            title="Plan Duration Segments"
+            title="Plan Duration Segments",
+            color='Duration_Category',
+        color_discrete_map={
+            'null': '#ADD8E6',        # Light blue for null
+            '16-30 days': '#90EE90',  # Light green for 16-30 days
+            '0-7 days': '#FFD166',
+            '8-15 days': '#EF476F',
+            '31+ days': '#26547C',
+            )
         ),
         use_container_width=True
     )
@@ -276,7 +288,8 @@ Which duration buckets are most profitable?
             x='Duration_Category',
             y='Total_Price',
             title="Revenue by Duration",
-            labels={'Duration_Category': 'Duration Category', 'Total_Price': 'Revenue (INR)'}
+            labels={'Duration_Category': 'Duration Category', 'Total_Price': 'Revenue (INR)'},
+            color_discrete_sequence=['#0D8661']
         ),
         use_container_width=True
     )
@@ -311,7 +324,8 @@ Pinpoint where your growth is coming from.
             pivot2,
             text_auto=True,
             aspect='auto',
-            title="Plan x Meal Frequency Heatmap"
+            title="Plan x Meal Frequency Heatmap",
+            color_continuous_scale="Greens"
         ),
         use_container_width=True
     )
@@ -326,7 +340,8 @@ Whisker plot of price per plan type for outliers & range.
             x='Plan_Type',
             y='Total_Price',
             title="Plan Price by Type",
-            labels={'Plan_Type': 'Plan Type', 'Total_Price': 'Plan Price (INR)'}
+            labels={'Plan_Type': 'Plan Type', 'Total_Price': 'Plan Price (INR)'},
+            color_discrete_sequence=['#90EE90']
         ),
         use_container_width=True
     )
