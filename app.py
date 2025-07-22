@@ -47,23 +47,23 @@ with tabs[0]:
     kpi3.metric("Avg. Revenue / Customer", f"{filtered['Total_Price'].mean():,.0f}")
     st.divider()
 
-    st.markdown("""
+        st.markdown("""
 **1.1. Subscriber Growth Over Time**  
 Shows how subscriber sign-ups and revenue trend across months.
     """)
     by_month = (
-    filtered.groupby('Month')
-    .agg(New_Subscribers=('Customer_ID', 'nunique'), Total_Revenue=('Total_Price', 'sum'))
-    .reset_index()
-)
-fig1 = px.bar(
-    by_month, 
-    x='Month', 
-    y='Unique_Customers', 
-    title="New Subscribers Per Month",
-    labels={'New_Subscribers': 'Number of Unique Customers', 'Month': 'Month'}
-)
-st.plotly_chart(fig1, use_container_width=True)
+        filtered.groupby('Month')
+        .agg(Unique_Customers=('Customer_ID', 'nunique'), Total_Revenue=('Total_Price', 'sum'))
+        .reset_index()
+    )
+    fig1 = px.bar(
+        by_month,
+        x='Month',
+        y='Unique_Customers',
+        title="New Subscribers Per Month",
+        labels={'Unique_Customers': 'Number of Unique Customers', 'Month': 'Month'}
+    )
+    st.plotly_chart(fig1, use_container_width=True)
 
 
     st.markdown("""
