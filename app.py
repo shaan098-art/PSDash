@@ -207,7 +207,7 @@ Assess repeat rates for customers by first month joined.
 # ==== 3. Plan & Revenue Deep-dive Tab ====
 with tabs[2]:
     st.markdown(
-        "<h1 style='text-align: center; color: #0D8661; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
+        "<h1 style='text-align: center; color: #90EE90; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
         unsafe_allow_html=True
     )
     st.title("📊 Plan, Meal, and Revenue Deep-dive")
