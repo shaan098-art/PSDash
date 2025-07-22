@@ -6,7 +6,7 @@ st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashbo
 
 # ========== File Upload ==========
 with st.sidebar:
-    st.title("🔍 Global Filters")
+    st.title("🔍 Filters")
     uploaded_file = st.file_uploader(
         "Upload a data file (.xlsx only)", type=["xlsx"], help="Upload your latest datasheet here."
     )
@@ -140,15 +140,15 @@ with tabs[1]:
     st.markdown("""
 **2.1. Top 10 Customers by Spend**  
 Know your highest value subscribers.
-    """)
-    top10 = (
-        filtered.groupby('Customer_ID')
-        .agg(Total_Spend=('Total_Price', 'sum'))
-        .sort_values('Total_Spend', ascending=False)
-        .head(10)
-        .reset_index()
-    )
-    st.dataframe(top10, use_container_width=True)
+""")
+top10 = (
+    filtered.groupby(['Customer_ID', 'Customer_Name'])  # now matches cleaned column name
+    .agg(Total_Spend=('Total_Price', 'sum'))
+    .sort_values('Total_Spend', ascending=False)
+    .head(10)
+    .reset_index()
+)
+st.dataframe(top10, use_container_width=True)
 
     st.markdown("""
 **2.2. Plan Length vs. Price**  
