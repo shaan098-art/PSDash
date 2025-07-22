@@ -265,7 +265,7 @@ Visualize spread of short, medium, long-duration plans.
         color_discrete_map={
             'null': '#FFD166',       
             '16-30 days': '#90EE90',  
-            '0-7 days': '#ADD8E6',
+            '0-7 days': '#0D8661',
             '8-15 days': '#EF476F',
             '31+ days': '#26547C',
         }
