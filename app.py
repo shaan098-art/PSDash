@@ -268,7 +268,7 @@ Visualize spread of short, medium, long-duration plans.
             '0-7 days': '#FFD166',
             '8-15 days': '#EF476F',
             '31+ days': '#26547C',
-            )
+        }
         ),
         use_container_width=True
     )
