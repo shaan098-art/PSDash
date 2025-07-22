@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#0D8661"        # Use any HEX code (e.g. teal/green)
+#backgroundColor = "#F7F9FA"     # Optional: page background
+#secondaryBackgroundColor = "#FFFFFF"
+textColor = "#262730"
+font = "sans serif"
