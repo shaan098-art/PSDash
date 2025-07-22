@@ -144,7 +144,7 @@ Know your highest value subscribers.
     top10 = (
         filtered.groupby(['Customer_ID', 'Customer_Name'])
         .agg(Total_Spend=('Total_Price', 'sum'))
-        .sort_values('Total_Spend', ascending=False)
+        .sort_values('Total_Spend (INR)', ascending=False)
         .head(10)
         .reset_index()
     )
