@@ -6,7 +6,7 @@ st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashbo
 
 # ========== File Upload ==========
 with st.sidebar:
-    st.title("🔍 Filters")
+    st.title("📤 Upload File")
     uploaded_file = st.file_uploader(
         "Upload a data file (.xlsx only)", type=["xlsx"], help="Upload your latest datasheet here."
     )
