@@ -66,20 +66,28 @@ Reveals monthly revenue performance to spot peaks & dips.
 **1.3. Top Meal Frequencies**  
 See which meal combinations drive most of the business.
     """)
+
+    # Robust: Calculate value counts and check before plotting
     meal_freq_counts = (
         filtered['Meal_Frequency']
         .value_counts()
         .reset_index()
-        .rename(columns={'index': 'Meal_Frequency', 'Meal_Frequency': 'Count'})
     )
-    fig3 = px.bar(
-        meal_freq_counts,
-        x='Meal_Frequency',
-        y='Count',
-        labels={'Meal_Frequency': 'Meal Frequency', 'Count': 'Count'},
-        title="Meal Plan Popularity"
-    )
-    st.plotly_chart(fig3, use_container_width=True)
+    meal_freq_counts.columns = ['Meal_Frequency', 'Count']
+
+    st.write("Meal frequency count DataFrame:", meal_freq_counts)  # Debugging; comment out later if needed
+
+    if not meal_freq_counts.empty:
+        fig3 = px.bar(
+            meal_freq_counts,
+            x='Meal_Frequency',
+            y='Count',
+            labels={'Meal_Frequency': 'Meal Frequency', 'Count': 'Count'},
+            title="Meal Plan Popularity"
+        )
+        st.plotly_chart(fig3, use_container_width=True)
+    else:
+        st.info("No data to display for Meal Plan Popularity. Try adjusting your filters.")
 
     st.markdown("""
 **1.4. Revenue by Meal Frequency**  
