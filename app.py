@@ -60,8 +60,13 @@ with tabs[0]:
         unsafe_allow_html=True
     )
     st.title("📈 Macro Business Overview")
+    total_subs = df['Customer_ID'].nunique()
+filtered_subs = filtered['Customer_ID'].nunique()
+
     kpi1, kpi2, kpi3 = st.columns(3)
-    kpi1.metric("Total Subscribers", filtered['Customer_ID'].nunique())
+kpi1.metric("Filtered Subscribers", filtered_subs)
+kpi1.metric("All Subscribers (Dataset)", total_subs)
+    #kpi1.metric("Total Subscribers", filtered['Customer_ID'].nunique())
     kpi2.metric("Total Revenue (INR)", f"{filtered['Total_Price'].sum():,.0f}")
     kpi3.metric("Avg. Revenue / Customer", f"{filtered['Total_Price'].mean():,.0f}")
     st.divider()
