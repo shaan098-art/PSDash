@@ -81,7 +81,7 @@ Shows how subscriber sign-ups and revenue trend across months.
         x='Month',
         y='Unique_Customers',
         title="New Subscribers Per Month",
-        labels={'Unique_Customers': 'Number of Unique Customers', 'Month': 'Month'}
+        labels={'Unique_Customers': 'Number of Unique Customers', 'Month': 'Month'},
         color_discrete_sequence=['#0D8661']  # Custom teal green
     )
     st.plotly_chart(fig1, use_container_width=True)
