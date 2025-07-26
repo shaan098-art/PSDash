@@ -58,7 +58,7 @@ with tabs[0]:
     st.markdown(
         """
         <div style='text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px;'>
-            <img src='logo.jpg' style='height:2.2em; vertical-align: middle;' alt='Logo'>
+            <img src='logo.png' style='height:2.2em; vertical-align: middle;' alt='Logo'>
             <span style='color: #0D8661; font-size: 2.2em; font-weight:700; vertical-align: middle;'>
                 Paushtikk Switch: Evolve Everyday!
             </span>
