@@ -11,6 +11,9 @@ def get_image_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
+# --- Use the function and embed in HTML ---
+img = get_image_as_base64("logo.png")
+
 # ========== File Upload ==========
 with st.sidebar:
     st.title("📤 Upload File")
@@ -62,9 +65,6 @@ tabs = st.tabs([
 
 # ==== 1. Macro Overview Tab ====
 with tabs[0]:
-
-# --- Use the function and embed in HTML ---
-img = get_image_as_base64("logo.png")
 
 st.markdown(
     f"""
