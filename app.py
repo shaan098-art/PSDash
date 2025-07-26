@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import base64
 
 st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashboard", layout="wide")
 
@@ -55,17 +56,27 @@ tabs = st.tabs([
 
 # ==== 1. Macro Overview Tab ====
 with tabs[0]:
-    st.markdown(
-        """
-        <div style='text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px;'>
-            <img src='logo.png' style='height:2.2em; vertical-align: middle;' alt='Logo'>
-            <span style='color: #0D8661; font-size: 2.2em; font-weight:700; vertical-align: middle;'>
-                Paushtikk Switch: Evolve Everyday!
-            </span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    # --- Function to encode image ---
+def get_image_as_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+
+# --- Use the function and embed in HTML ---
+img = get_image_as_base64("logo.png")
+
+st.markdown(
+    f"""
+    <div style='text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px;'>
+        <img src='data:image/png;base64,{img}' style='height:2.2em; vertical-align: middle;' alt='Logo'>
+        <span style='color: #0D8661; font-size: 2.2em; font-weight:700; vertical-align: middle;'>
+            Paushtikk Switch: Evolve Everyday!
+        </span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
     st.title("📈 Macro Business Overview")
 
     kpi1, kpi2, kpi3 = st.columns(3)
