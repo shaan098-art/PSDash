@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-#import base64
+import base64
 
 st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashboard", layout="wide")
 
