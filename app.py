@@ -1,10 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import base64
 
 st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashboard", layout="wide")
-
 
 # ========== File Upload ==========
 with st.sidebar:
@@ -57,19 +55,11 @@ tabs = st.tabs([
 
 # ==== 1. Macro Overview Tab ====
 with tabs[0]:
-st.markdown(
-        """
-        <div style='text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px;'>
-            <img src='logo.png' style='height:2.2em; vertical-align: middle;' alt='Logo'>
-            <span style='color: #0D8661; font-size: 2.2em; font-weight:700; vertical-align: middle;'>
-                Paushtikk Switch: Evolve Everyday!
-            </span>
-        </div>
-        """,
+    st.markdown(
+        "<h1 style='text-align: center; color: #0D8661; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
         unsafe_allow_html=True
     )
     st.title("📈 Macro Business Overview")
-
     kpi1, kpi2, kpi3 = st.columns(3)
     kpi1.metric("Total Subscribers", filtered['Customer_ID'].nunique())
     kpi2.metric("Total Revenue (INR)", f"{filtered['Total_Price'].sum():,.0f}")
@@ -90,8 +80,7 @@ Shows how subscriber sign-ups and revenue trend across months.
         x='Month',
         y='Unique_Customers',
         title="New Subscribers Per Month",
-        labels={'Unique_Customers': 'Number of Unique Customers', 'Month': 'Month'},
-        color_discrete_sequence=['#90EE90']  # Custom teal green
+        labels={'Unique_Customers': 'Number of Unique Customers', 'Month': 'Month'}
     )
     st.plotly_chart(fig1, use_container_width=True)
 
@@ -102,8 +91,7 @@ Reveals monthly revenue performance to spot peaks & dips.
     fig2 = px.line(
         by_month, x='Month', y='Total_Revenue',
         markers=True, title="Monthly Revenue (INR)",
-        labels={'Total_Revenue': 'Total Revenue (INR)', 'Month': 'Month'},
-        color_discrete_sequence=['#0D8661']
+        labels={'Total_Revenue': 'Total Revenue (INR)', 'Month': 'Month'}
     )
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -124,8 +112,7 @@ See which meal combinations drive most of the business.
             x='Meal_Frequency',
             y='Count',
             labels={'Meal_Frequency': 'Meal Frequency', 'Count': 'Count'},
-            title="Meal Plan Popularity",
-            color_discrete_sequence=['#90EE90']
+            title="Meal Plan Popularity"
         )
         st.plotly_chart(fig3, use_container_width=True)
     else:
@@ -141,8 +128,7 @@ Shows average order value by each meal plan type.
             x='Meal_Frequency',
             y='Total_Price',
             title="Order Value by Meal Frequency",
-            labels={'Meal_Frequency': 'Meal Frequency', 'Total_Price': 'Order Value (INR)'},
-            color_discrete_sequence=['#0D8661']
+            labels={'Meal_Frequency': 'Meal Frequency', 'Total_Price': 'Order Value (INR)'}
         ),
         use_container_width=True
     )
@@ -179,8 +165,7 @@ See how plan duration impacts customer spend.
             x='Duration_Days',
             y='Total_Price',
             title="Plan Duration vs. Spend",
-            labels={'Duration_Days': 'Duration (Days)', 'Total_Price': 'Spend (INR)'},
-            color_discrete_sequence=['#90EE90']
+            labels={'Duration_Days': 'Duration (Days)', 'Total_Price': 'Spend (INR)'}
         ),
         use_container_width=True
     )
@@ -195,8 +180,7 @@ Analyze customer segments by spend tier.
             x='Total_Price',
             nbins=20,
             title="Customer Spend Histogram",
-            labels={'Total_Price': 'Total Spend (INR)'},
-            color_discrete_sequence=['#0D8661']
+            labels={'Total_Price': 'Total Spend (INR)'}
         ),
         use_container_width=True
     )
@@ -220,7 +204,7 @@ Assess repeat rates for customers by first month joined.
 # ==== 3. Plan & Revenue Deep-dive Tab ====
 with tabs[2]:
     st.markdown(
-        "<h1 style='text-align: center; color: #90EE90; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
+        "<h1 style='text-align: center; color: #0D8661; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
         unsafe_allow_html=True
     )
     st.title("📊 Plan, Meal, and Revenue Deep-dive")
@@ -240,8 +224,7 @@ Find out which plan types earn the most for your business.
             x='Plan_Type',
             y='Total_Revenue',
             title="Total Revenue by Plan Type",
-            labels={'Plan_Type': 'Plan Type', 'Total_Revenue': 'Total Revenue (INR)'},
-            color_discrete_sequence=['#0D8661']
+            labels={'Plan_Type': 'Plan Type', 'Total_Revenue': 'Total Revenue (INR)'}
         ),
         use_container_width=True
     )
@@ -269,15 +252,7 @@ Visualize spread of short, medium, long-duration plans.
         px.pie(
             filtered,
             names='Duration_Category',
-            title="Plan Duration Segments",
-            color='Duration_Category',
-        color_discrete_map={
-            'null': '#FFFBCC',       
-            '16-30 days': '#90EE90',  
-            '0-7 days': '#0D8661',
-            '8-15 days': '#EF476F',
-            '31+ days': '#26547C',
-        }
+            title="Plan Duration Segments"
         ),
         use_container_width=True
     )
@@ -297,8 +272,7 @@ Which duration buckets are most profitable?
             x='Duration_Category',
             y='Total_Price',
             title="Revenue by Duration",
-            labels={'Duration_Category': 'Duration Category', 'Total_Price': 'Revenue (INR)'},
-            color_discrete_sequence=['#0D8661']
+            labels={'Duration_Category': 'Duration Category', 'Total_Price': 'Revenue (INR)'}
         ),
         use_container_width=True
     )
@@ -333,8 +307,7 @@ Pinpoint where your growth is coming from.
             pivot2,
             text_auto=True,
             aspect='auto',
-            title="Plan x Meal Frequency Heatmap",
-            color_continuous_scale="Greens"
+            title="Plan x Meal Frequency Heatmap"
         ),
         use_container_width=True
     )
@@ -349,8 +322,7 @@ Whisker plot of price per plan type for outliers & range.
             x='Plan_Type',
             y='Total_Price',
             title="Plan Price by Type",
-            labels={'Plan_Type': 'Plan Type', 'Total_Price': 'Plan Price (INR)'},
-            color_discrete_sequence=['#90EE90']
+            labels={'Plan_Type': 'Plan Type', 'Total_Price': 'Plan Price (INR)'}
         ),
         use_container_width=True
     )
