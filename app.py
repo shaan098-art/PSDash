@@ -58,7 +58,14 @@ tabs = st.tabs([
 # ==== 1. Macro Overview Tab ====
 with tabs[0]:
 st.markdown(
-        "<h1 style='text-align: center; color: #0D8661; font-size: 2.6rem; font-weight: 700;'>🍱 Paushtikk Switch: Evolve Everyday!</h1>",
+        """
+        <div style='text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px;'>
+            <img src='logo.png' style='height:2.2em; vertical-align: middle;' alt='Logo'>
+            <span style='color: #0D8661; font-size: 2.2em; font-weight:700; vertical-align: middle;'>
+                Paushtikk Switch: Evolve Everyday!
+            </span>
+        </div>
+        """,
         unsafe_allow_html=True
     )
     st.title("📈 Macro Business Overview")
