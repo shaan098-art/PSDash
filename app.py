@@ -5,6 +5,12 @@ import base64
 
 st.set_page_config(page_title="Paustikk Switch's - Subscription Analytics Dashboard", layout="wide")
 
+    # --- Function to encode image ---
+def get_image_as_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
 # ========== File Upload ==========
 with st.sidebar:
     st.title("📤 Upload File")
@@ -56,12 +62,6 @@ tabs = st.tabs([
 
 # ==== 1. Macro Overview Tab ====
 with tabs[0]:
-    # --- Function to encode image ---
-def get_image_as_base64(file):
-    with open(file, "rb") as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
-
 
 # --- Use the function and embed in HTML ---
 img = get_image_as_base64("logo.png")
